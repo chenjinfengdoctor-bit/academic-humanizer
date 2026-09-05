@@ -1,12 +1,15 @@
 ---
 name: academic-humanizer
-version: 0.3.3
+version: 0.4.0-medical
 description: |
   Improve the clarity and voice of AI-assisted academic writing (papers, theses, rebuttals) and
   funding proposals (NSF Project Summary/Description, NIH Specific Aims): preserve scholarly
   conventions, match claims to evidence (and, for proposals, claims to feasibility), and match the
-  author's own voice. It never changes a number, result, or citation, and it is not for evading
-  AI-use disclosure. Use when editing AI-assisted academic prose or grant proposals.
+  author's own voice. Includes a medical/clinical adaptation layer (Layer 7) enforcing CONSORT/STROBE/TRIPOD
+  reporting discipline, precise medical terminology, and mandatory methods-element checks (ethics approval,
+  informed consent, follow-up duration, sample size justification). It never changes a number, result, or
+  citation, and it is not for evading AI-use disclosure. Use when editing AI-assisted academic prose or
+  grant proposals.
 license: MIT
 compatibility: claude-code codex morphmind opencode
 allowed-tools: [Read, Write, Edit, Grep, Glob, AskUserQuestion]
@@ -21,11 +24,12 @@ number, result, and citation, and it is not a tool for evading AI-use disclosure
 ## When to use
 Editing or reviewing academic prose: paper sections, abstracts, rebuttals, related work, and **funding
 proposals** (NSF Project Summary/Description, NIH Specific Aims, fellowship and foundation proposals;
-see Layer 6). **Not** for blogs, marketing, or personal essays, and **never** inject opinion, humor, or
-first-person "personality" into a manuscript. For technical writing, neutral and precise *is* the human
-voice. One caveat for proposals: their register is different from a paper's, since they are sold on
-vision and feasibility, so the ambition language a paper would trim is appropriate there; apply Layer 6,
-not the paper layers' stricter trimming, to vision statements.
+see Layer 6). For medical/clinical manuscripts, also apply Layer 7. **Not** for blogs, marketing, or
+personal essays, and **never** inject opinion, humor, or first-person "personality" into a manuscript.
+For technical writing, neutral and precise *is* the human voice. One caveat for proposals: their register
+is different from a paper's, since they are sold on vision and feasibility, so the ambition language a
+paper would trim is appropriate there; apply Layer 6, not the paper layers' stricter trimming, to vision
+statements.
 
 ## Core principle
 Academic writing already has a correct human voice: neutral, precise, third-person plural ("we"), every
@@ -36,14 +40,15 @@ verb is stronger than its evidence.**
 ## Process
 1. **Read** the manuscript and any author writing sample; note the document type (paper vs. funding
    proposal) and the target venue or funding agency. For proposals, also apply Layer 6 and preserve
-   appropriate vision.
+   appropriate vision. For medical/clinical work, also apply Layer 7.
 2. **Audit** (do not edit yet): list each detected pattern with its location and proposed fix, and each
-   empirical claim's evidence status.
+   empirical claim's evidence status. For medical papers, also run the mandatory methods-element checklist
+   (7.4) and flag any missing item.
 3. **Rewrite**: same structure and content, all claims and citations preserved, tells removed, over-claims
    matched to evidence, legitimate hedging kept.
 4. **Report**: cleaned text plus a short change log (patterns removed, claims softened or given evidence
-   pointers, voice notes). Cover everything the original covered: if it had five paragraphs, so does the
-   rewrite.
+   pointers, voice notes, and—for medical papers—any missing methods elements flagged for the author).
+   Cover everything the original covered: if it had five paragraphs, so does the rewrite.
 
 ---
 
@@ -178,8 +183,9 @@ and (b) does the verb match the strength of that evidence?
 If the author supplies prior papers, read a sample first and note sentence rhythm, connective habits,
 level and placement of hedging, how they open sections, notation, and recurring phrasings, then match
 them. Match the venue's register too (e.g., ICLR/NeurIPS: terse, direct, results-forward; Nature/PNAS:
-more expository). Absent a sample, default to clean, precise, venue-appropriate prose, not the casual,
-opinionated voice of a general-purpose humanizer.
+more expository; *Lancet/NEJM/JAMA*: structured, clinically anchored, strict reporting guidelines).
+Absent a sample, default to clean, precise, venue-appropriate prose, not the casual, opinionated voice
+of a general-purpose humanizer.
 
 ## Layer 6: Funding-proposal mode (NSF, NIH)
 A proposal is not a paper. It is sold on **vision plus feasibility**, not on finished results, and
@@ -256,6 +262,135 @@ the gap for the author rather than papering over it.
 
 ---
 
+## Layer 7: Medical / clinical domain adaptation
+
+Apply this layer to any manuscript involving human subjects, patient populations, clinical interventions,
+diagnostic tests, epidemiological data, or preclinical animal studies. Medical writing has its own
+reporting discipline and terminology precision that Layers 1--6 do not cover. The goal is not to
+medicalize generic prose, but to enforce the rigor clinical reviewers and journals expect.
+
+### 7.1 Clinical phrasing discipline
+
+- **Patient-centered nouns.** Use *patients* for clinical populations, *participants* for healthy-volunteer
+  or community studies, *subjects* only in formal study-design contexts (e.g., "study subjects"). Do not
+  alternate among them for one cohort.
+- **No curative overclaim.** *Watch:* cure, cured, curative, miracle, breakthrough, game-changer,
+  "revolutionary treatment", "eliminates the disease". Clinical work *shows improved outcomes*, *reduces
+  mortality*, *achieves response*—it does not cure unless the endpoint is explicitly disease-free survival
+  with long-term follow-up.
+  **Before:** *Our therapy cures lung cancer.*
+  **After:** *Our therapy improved 12-month progression-free survival from 32% to 51% (HR 0.58, 95% CI
+  0.41--0.82; Table 2).*
+- **Interventions must be concrete.** Name the agent, dose, route, frequency, and duration. "Patients
+  received treatment" is unacceptable; "patients received intravenous cisplatin 75 mg/m^2 every 3 weeks
+  for up to 6 cycles" is the standard.
+- **Outcomes: primary vs. secondary.** Distinguish the *primary endpoint* from *secondary endpoints*; do
+  not let a secondary finding carry the abstract's main claim without labeling it.
+- **Avoid "treatment" as a vague stand-in.** If the intervention is drug X, say drug X; if it is surgery,
+  say surgery. "Treatment group" is acceptable only after the intervention has been defined.
+
+### 7.2 Statistical reporting discipline
+
+Match the reporting guideline to the study design and flag missing elements:
+
+| Study design | Guideline | Non-negotiable elements |
+|---|---|---|
+| Randomized controlled trial | CONSORT 2010 | randomization method, allocation concealment, blinding/masking, sample size justification, flow diagram with attrition, intention-to-treat analysis, between-group effect sizes with 95% CI |
+| Observational cohort / case-control | STROBE | eligibility criteria, setting and dates, exposure definition, outcome ascertainment, confounding control strategy, missing-data handling |
+| Diagnostic / prognostic accuracy study | STARD | index test and reference standard definitions, blinding of test readers, spectrum of disease severity, 2x2 table data, sensitivity/specificity with 95% CI |
+| Multivariable prediction model | TRIPOD | source population, candidate predictors, missing data, overfitting control (penalization / shrinkage), internal and external validation, calibration and discrimination metrics |
+| Animal / preclinical in vivo | ARRIVE 2.0 | sample size justification, randomization and blinding, inclusion/exclusion, humane endpoints, housing and husbandry, adverse events |
+
+- **Effect size over p-value alone.** Every between-group comparison should report the effect estimate
+  (HR, OR, RR, mean difference) *with its 95% confidence interval*. A bare "p < 0.05" is insufficient.
+  **Before:** *The difference was significant (p < 0.05).*
+  **After:** *Median overall survival was 14.2 vs. 9.8 months (HR 0.67, 95% CI 0.49--0.91; p = 0.01).*
+- **Statistical vs. clinical significance.** Do not call a result "clinically significant" unless the
+  effect magnitude meets a pre-specified clinically meaningful threshold; "statistically significant"
+  refers only to the p-value. Flag any conflation.
+- **No "trend toward significance."** If p >= 0.05, report the actual p-value and the effect size; do not
+  dress up a null result as a "positive trend."
+- **Subgroup analyses.** Label them as *exploratory* unless pre-specified in the protocol; do not let a
+  subgroup finding become the headline claim.
+
+### 7.3 Medical terminology precision
+
+These pairs are frequently conflated in AI drafts; enforce the correct distinction:
+
+- **Incidence vs. prevalence.** Incidence = new cases over time; prevalence = existing cases at a point.
+  Do not use "incidence rate" when describing a cross-sectional survey.
+- **Mortality vs. fatality vs. death.** *Mortality* is the rate in a population; *case fatality rate* is
+  deaths among confirmed cases; *death* is the event. Use the one that matches the denominator.
+- **Risk vs. odds vs. hazard.** *Risk* = probability of event in a time window; *odds* = event / no-event;
+  *hazard* = instantaneous event rate. Report the metric that matches the model (Cox -> HR; logistic ->
+  OR; cumulative incidence -> risk ratio).
+- **Sensitivity / specificity / accuracy / PPV / NPV.** Each has a fixed definition and denominator; do
+  not call a high PPV "high accuracy" or report sensitivity without the disease prevalence context.
+- **Disease names.** Use standard nomenclature (ICD-11 / MeSH / WHO terminology). Avoid colloquial
+  shortenings ("lung cancer" is acceptable; "lung ca" in running text is not). Use tumor-node-metastasis
+  (TNM) stage consistently.
+- **Drug names.** Use the *generic (INN) name* on first mention; brand names belong in parentheses only
+  if the specific formulation matters. Do not let a brand name become the default referent.
+
+### 7.4 Mandatory methods-element checklist (audit, do not invent)
+
+For any study involving human or animal data, audit the Methods section against this list. **Flag missing
+items in the change report; never fabricate an ethics number, consent statement, or follow-up duration.**
+
+- [ ] **Ethics approval / IRB / IEC** — institution name + approval number + approval date. For
+  retrospective studies, note whether waiver of consent was granted.
+- [ ] **Informed consent** — explicit statement (written / oral / waived with reason). For minors or
+  incapacitated participants, note guardian/assent process.
+- [ ] **Trial registration** — for prospective interventional studies: registry name (ClinicalTrials.gov,
+  ChiCTR, etc.) + registration number + registration date relative to first enrollment.
+- [ ] **Follow-up duration** — median and range, or minimum follow-up; not just "patients were followed
+  up."
+- [ ] **Sample size justification** — the assumed effect size, alpha, power, and any inflation for
+  attrition. A bare "we enrolled N patients" without justification is a flag.
+- [ ] **Randomization** — method (simple / block / stratified / cluster), allocation ratio, concealment
+  mechanism. (Applies to RCTs only.)
+- [ ] **Blinding / masking** — who was masked (patients, investigators, outcome assessors, statisticians)
+  and how. If open-label, state explicitly why.
+- [ ] **Inclusion / exclusion criteria** — enumerated, not "consecutive patients were enrolled."
+- [ ] **Statistical analysis plan** — primary analysis (ITT / per-protocol), software + version,
+  significance threshold, handling of missing data, multiplicity correction if multiple endpoints.
+- [ ] **Data sharing statement** — required by many journals (ICMJE): state whether de-identified data
+  are available and under what conditions.
+- [ ] **Conflicts of interest / funding** — funding source and role of the funder; COI declaration.
+
+If any item is missing, the change report must list it as **"Methods element missing — author must
+supply"** rather than silently omitting or inventing it.
+
+### 7.5 Medical manuscript structure
+
+- **Structured abstract.** Clinical journals require *Background, Methods, Results, Conclusions* (or
+  *Objective, Methods, Results, Conclusion*). Keep each section tight; Results must carry the primary
+  endpoint number.
+- **IMRaD discipline.** Introduction ends with the explicit study objective or research question; Methods
+  is reproducible; Results follows the order of endpoints (primary first); Discussion interprets, does not
+  repeat numbers, and includes limitations.
+- **PICO anchoring.** In the Introduction's final paragraph, the Population, Intervention, Comparator,
+  and Outcome should be identifiable. If any is vague, flag it.
+- **Discussion limitations.** Every clinical manuscript needs a limitations paragraph that names at least
+  the design's real weaknesses (retrospective, single-center, small sample, short follow-up, residual
+  confounding). "Our study has some limitations" with no specifics is a flag.
+- **GRADE / evidence framing.** When making practice recommendations, cite the evidence level (GRADE:
+  high / moderate / low / very low) rather than asserting "doctors should use X."
+
+### 7.6 Preserve (medical conventions to leave alone)
+
+- Standard abbreviations on second mention: HR, OR, RR, CI, IQR, SD, SE, IQR, OS, PFS, DFS, ORR, DCR,
+  AE, SAE, DLT, MTD, RP2D, ITT, PP, IRB, IEC, ICD, TNM, RECIST, WHO, ECOG, KPS. (Define on first use.)
+- Disease stage / grade / histology terminology (e.g., "stage IIIA adenocarcinoma")—do not paraphrase.
+- Anatomical and physiological terms in their standard form.
+- Dosage expressions (mg/m^2, mg/kg, IU/mL) and units of laboratory values.
+- The passive voice in Methods ("Blood samples were collected at baseline and at 4, 8, and 12 weeks") is
+  standard and preferred; do not force active voice there.
+
+---
+
 ## Output
 Return the cleaned text plus a short change report: patterns removed (by type), claims softened or given
-evidence pointers, and any voice/venue notes. Confirm that no number, equation, or citation was altered.
+evidence pointers, voice/venue notes, and—for medical papers—any missing methods elements from the 7.4
+checklist (flagged as author-supplied, never invented). Confirm that no number, equation, or citation was
+altered.
