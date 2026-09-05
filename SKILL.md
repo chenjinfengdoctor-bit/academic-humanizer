@@ -1,13 +1,14 @@
 ---
 name: academic-humanizer
-version: 0.4.0-medical
+version: 0.4.1-medical
 description: |
   Improve the clarity and voice of AI-assisted academic writing (papers, theses, rebuttals) and
   funding proposals (NSF Project Summary/Description, NIH Specific Aims): preserve scholarly
   conventions, match claims to evidence (and, for proposals, claims to feasibility), and match the
   author's own voice. Includes a medical/clinical adaptation layer (Layer 7) enforcing CONSORT/STROBE/TRIPOD
-  reporting discipline, precise medical terminology, and mandatory methods-element checks (ethics approval,
-  informed consent, follow-up duration, sample size justification). It never changes a number, result, or
+  reporting discipline, precise medical terminology, mandatory methods-element checks (ethics approval,
+  informed consent, follow-up duration, sample size justification), and specialty-specific terminology
+  for oncology, respirology/pulmonology, and nanomedicine. It never changes a number, result, or
   citation, and it is not for evading AI-use disclosure. Use when editing AI-assisted academic prose or
   grant proposals.
 license: MIT
@@ -332,6 +333,8 @@ These pairs are frequently conflated in AI drafts; enforce the correct distincti
 - **Drug names.** Use the *generic (INN) name* on first mention; brand names belong in parentheses only
   if the specific formulation matters. Do not let a brand name become the default referent.
 
+For specialty-specific terminology (oncology, respirology, nanomedicine), see **7.7**.
+
 ### 7.4 Mandatory methods-element checklist (audit, do not invent)
 
 For any study involving human or animal data, audit the Methods section against this list. **Flag missing
@@ -386,6 +389,196 @@ supply"** rather than silently omitting or inventing it.
 - Dosage expressions (mg/m^2, mg/kg, IU/mL) and units of laboratory values.
 - The passive voice in Methods ("Blood samples were collected at baseline and at 4, 8, and 12 weeks") is
   standard and preferred; do not force active voice there.
+
+### 7.7 Specialty-specific terminology
+
+Apply the relevant subsection when the manuscript falls within that specialty. These are not exhaustive
+glossaries; they flag the terms most often conflated or misused in AI-assisted drafts and the correct
+usage expected by specialty reviewers.
+
+#### 7.7.1 Oncology
+
+**Response evaluation criteria** — name the criterion and version; do not say "tumor response was
+measured" without specifying.
+- Solid tumors: **RECIST 1.1** (default). Immuno-oncology trials: **iRECIST** (immune-related response
+  criteria; distinguishes iUPD from iCPD). Brain metastases: **RANO** (and mRANO for meningioma,
+  RANO-HGG for high-grade glioma). Lymphoma: **Lugano / Cheson 2014**. PET-based: **PERCIST 1.0**.
+  Hepatocellular carcinoma: **mRECIST** (EASL criteria for viable tumor).
+- **Before:** *Tumor response was assessed every 8 weeks.*
+- **After:** *Tumor response was assessed by contrast-enhanced CT every 8 weeks according to RECIST 1.1;
+  immune-related responses were also classified per iRECIST.*
+
+**Endpoints — distinguish, do not collapse.**
+- **OS** (overall survival): time from randomization to death from any cause.
+- **PFS** (progression-free survival): time to progression or death.
+- **DFS** (disease-free survival): post-curative-intent setting; time to recurrence or death.
+- **EFS** (event-free survival): broader than DFS (includes second malignancy, treatment failure).
+- **TTP** (time to progression): excludes death; use only when non-cancer deaths are common.
+- **ORR** (objective response rate): CR + PR only. **DCR** (disease control rate): CR + PR + SD.
+  **CBR** (clinical benefit rate): CR + PR + SD lasting ≥ a pre-specified duration (e.g., ≥24 weeks).
+- **DoR / DOR** (duration of response): from first response to progression.
+- *Flag:* calling DCR "response rate," or reporting "survival benefit" without specifying OS vs PFS.
+
+**Response categories** — use the standard abbreviations after defining once: **CR** (complete
+response), **PR** (partial response), **SD** (stable disease), **PD** (progressive disease), **NE**
+(not evaluable). For iRECIST: **iCR / iPR / iSD / iUPD / iCPD**. Do not invent "partial remission" in
+solid-tumor oncology (remission belongs to leukemia/lymphoma parlance).
+
+**Toxicity and dose-finding.**
+- Grade adverse events by **CTCAE** version (e.g., CTCAE v5.0). Distinguish **AE** (any untoward
+  occurrence), **SAE** (serious: death, hospitalization, disability, congenital anomaly, life-threatening),
+  **ADR** (adverse drug reaction: causal relationship assessed).
+- **DLT** (dose-limiting toxicity): defined prospectively for the first cycle; **MTD** (maximum tolerated
+  dose); **RP2D** (recommended phase II dose). Do not call MTD "the highest safe dose"—it is the dose
+  below which DLT rate exceeds the pre-specified threshold.
+
+**Staging and treatment setting.**
+- **TNM** staging: specify **cTNM** (clinical), **pTNM** (pathologic), **ypTNM** (post-neoadjuvant),
+  **rTNM** (recurrent). Cite the AJCC/UICC edition (e.g., AJCC 8th).
+- Treatment setting: **neoadjuvant** (before surgery), **adjuvant** (after curative-intent surgery),
+  **perioperative** (both), **definitive / concurrent chemoradiation**, **metastatic / advanced /
+  recurrent**, **first-line / second-line / later-line**. Do not use "adjuvant" for metastatic
+  maintenance therapy.
+
+**Biomarkers — report the assay and threshold.**
+- PD-L1: **TPS** (tumor proportion score) vs **CPS** (combined positive score = tumor + immune cells);
+  specify the antibody clone and platform (22C3 pharmDx, SP263, etc.).
+- **TMB** (tumor mutational burden): report mut/Mb and the assay panel size.
+- **MSI-H / dMMR**: specify the method (PCR pentaplex vs IHC for MLH1/MSH2/MSH6/PMS2).
+- HER2: **IHC 0/1+/2+/3+**; IHC 2+ requires **FISH/SISH** reflex with HER2/CEP17 ratio and average copy
+  number.
+- Driver mutations (EGFR, ALK, ROS1, BRAF V600E, KRAS G12C, MET exon 14, NTRK, RET): specify the
+  specific variant, not just "EGFR mutation."
+
+#### 7.7.2 Respirology / Pulmonology
+
+**Pulmonary function testing (PFT).**
+- **FEV1** (forced expiratory volume in 1 second), **FVC** (forced vital capacity), **FEV1/FVC ratio**
+  (obstruction if < LLN or <0.70 per GOLD), **FEF25-75** (small-airway indicator, not diagnostic alone).
+- **DLCO / TLCO** (diffusing capacity): corrected for hemoglobin and alveolar volume (**KCO**).
+- **TLC** (total lung capacity), **RV** (residual volume), **FRC** (functional residual capacity).
+  Restriction = reduced TLC; obstruction with air trapping = elevated RV/TLC.
+- **BDT** (bronchodilator test): report absolute and percent change in FEV1; reversibility = ≥12% AND
+  ≥200 mL. **BPT** (bronchial provocation test): methacholine PC20 or mannitol FEV1 fall.
+- *Flag:* "mild obstruction" without specifying FEV1 % predicted and GOLD stage.
+
+**Disease nomenclature and severity.**
+- **COPD**: GOLD 2024 classification (spirometric grades 1-4 combined with symptom/exacerbation groups
+  A/B/E). Do not use "COPD stage III" alone—specify spirometric grade and group.
+- **Asthma**: GINA steps 1-5; distinguish **controlled / partly controlled / uncontrolled**. **Severe
+  asthma** = uncontrolled despite high-dose ICS-LABA or requires high-dose therapy to maintain control.
+- **ILD / DPLD**: specify the pattern — **IPF / UIP**, **NSIP**, **OP**, **HP**, **CTD-ILD**, **PPFE**.
+  "Interstitial lung disease" alone is too broad for a study cohort.
+- **Pulmonary nodules**: **GGO** (ground-glass opacity), **pGGN** (pure GGN), **mGGN** (mixed/part-solid
+  GGN), **solid nodule**. Report size in mm (mean of long and short axis on axial CT) and growth rate
+  (volume doubling time). Use **Lung-RADS** for screening-detected nodules.
+- **Lung cancer histology**: adenocarcinoma (lepidic/acinar/papillary/micropapillary/solid), squamous
+  cell carcinoma, **SCLC** (small cell), **LCNEC** (large cell neuroendocrine carcinoma), carcinoid
+  (typical/atypical). Do not abbreviate "non-small cell lung cancer" as "lung cancer" in a cohort that
+  includes SCLC.
+
+**Imaging signs.**
+- CT signs: **lobulation** (分叶), **spiculation** (毛刺), **pleural retraction/tailing** (胸膜牵拉),
+  **vacuole sign** (空泡征), **air bronchogram** (支气管充气征), **calcification** (benign patterns:
+  diffuse/popcorn/central/laminated; malignant: eccentric/stippled).
+- **PET-CT**: report **SUVmax** and the uptake pattern; note that SUV is semiquantitative and affected
+  by blood glucose, uptake time, and scanner calibration. Do not call "high SUV" diagnostic of malignancy
+  without histologic correlation.
+
+**Procedures and interventions.**
+- **FOB** (flexible bronchoscopy), **EBUS-TBNA** (endobronchial ultrasound-guided transbronchial needle
+  aspiration), **EUS-B** (esophageal ultrasound), **TBLB** (transbronchial lung biopsy), **cryobiopsy**,
+  **navigational bronchoscopy**, **PTNB** (percutaneous transthoracic needle biopsy), **thoracentesis**,
+  **pleural biopsy** (closed/CT-guided/thoracoscopic), **chest tube / indwelling pleural catheter**.
+- For biopsies: report the diagnostic yield and complication rate (pneumothorax, bleeding) by approach.
+
+**Infection and critical care.**
+- Pneumonia setting: **CAP** (community-acquired), **HAP** (hospital-acquired, ≥48h after admission),
+  **VAP** (ventilator-associated, ≥48h after intubation), **HCAP** (no longer a separate category in
+  current ATS/IDSA guidelines—do not use).
+- Severity scores: **CURB-65**, **PSI/PORT**, **SMART-COP**. Do not mix scores without justification.
+- Tuberculosis: **sputum smear-positive / smear-negative**, **culture-positive / culture-negative**,
+  **drug-sensitive / MDR / XDR / RR-TB**. Report the diagnostic method (smear, Xpert MTB/RIF, culture,
+  LPA).
+- **Oxygenation / gas exchange**: **PaO2/FiO2 ratio** (P/F ratio; ARDS: mild 200-300, moderate
+  100-200, severe <100 per Berlin definition), **A-a gradient**, **SaO2 vs SpO2** (arterial vs pulse
+  oximetry; do not equate). **PaCO2** with pH and **HCO3- / BE** for acid-base interpretation.
+
+#### 7.7.3 Nanomedicine / Nanopharmaceutics
+
+**Formulation type — be specific; "nanoparticle" is a last-resort umbrella term.**
+- **Liposome** (unilamellar/multilamellar; PEGylated/stealth; stimuli-sensitive). **Micelle**
+  (polymeric micelle; critical micelle concentration must be reported). **Dendrimer** (generation, e.g.,
+  PAMAM G5). **Polymeric nanoparticle** (PLGA, PLA, PCL, chitosan, etc.—name the polymer). **SLN**
+  (solid lipid nanoparticle) vs **NLC** (nanostructured lipid carrier). **Polymer-drug conjugate**.
+- Inorganic: **gold nanoparticle** (sphere/rod/star/shell), **iron oxide nanoparticle** (SPION),
+  **quantum dot** (core/shell composition), **carbon nanotube** (SWCNT/MWCNT), **MOF** (metal-organic
+  framework; name the topology, e.g., ZIF-8, UiO-66, MIL-101).
+- *Flag:* calling a liposome "a nanoparticle" without specifying the lipid composition, PEGylation, and
+  lamellarity.
+
+**Physicochemical characterization — report the method and conditions.**
+- **Hydrodynamic diameter / Z-average** (DLS), **PDI** (polydispersity index; <0.3 = monodisperse,
+  >0.7 = broad). Distinguish DLS intensity/volume/number distributions.
+- **Zeta potential** (report medium pH and ionic strength).
+- **EE** (encapsulation efficiency %) and **DL** (drug loading % or wt%). Do not conflate: EE =
+  (encapsulated drug / total drug) × 100; DL = (encapsulated drug / total nanoparticle mass) × 100.
+- Morphology: **TEM / SEM / AFM** (report staining and drying method; DLS size is always larger than
+  TEM dry size—do not call the discrepancy an error).
+- Crystallinity: **XRD**, **DSC**, **TGA**. Stability: storage conditions, time points, and what was
+  measured (size, PDI, zeta, EE, drug retention).
+
+**In vitro evaluation.**
+- **Drug release**: specify the method (dialysis bag, ultrafiltration, centrifugal filter), medium
+  (PBS pH 7.4, pH 5.0 endosomal, with/without serum), sink conditions, and sampling. Report with a
+  kinetic model fit (zero-order, first-order, Higuchi, Korsmeyer-Peppas) only if justified.
+- **Cellular uptake**: distinguish **qualitative** (confocal laser scanning microscopy) from
+  **quantitative** (flow cytometry mean fluorescence intensity, or HPLC of cell-associated drug). Report
+  incubation time, concentration, and cell line.
+- **Cytotoxicity**: assay name (**MTT, CCK-8, SRB, LDH**), IC50 with 95% CI, cell line, seeding density,
+  incubation time. Do not report "biocompatible" without a comparator and a tested concentration range.
+- **Hemolysis**: report the method (ASTM E2524 or ISO 10993-4), positive/negative controls, and the
+  concentration range; <5% hemolysis is the conventional threshold but must be stated.
+- **Protein corona**: if studied, report incubation plasma source, time, temperature, and
+  separation/wash protocol; distinguish hard corona from soft corona.
+
+**In vivo evaluation.**
+- **Pharmacokinetics**: report AUC0-t, AUC0-∞, t1/2, CL, Vd, MRT; compare to free drug. Specify the
+  bioanalytical method and whether total or released drug was measured.
+- **Biodistribution**: report %ID/g or %ID/organ at each time point; include major organs (liver, spleen,
+  lung, kidney, heart, brain, tumor). Use **EPR effect** only when tumor accumulation exceeds blood and
+  is shown relative to healthy tissue—do not assert EPR from a single time point.
+- **Imaging**: modality (fluorescence, bioluminescence, MRI, PET, SPECT, photoacoustic), probe,
+  excitation/emission or isotope, and quantification method. Ex vivo organ imaging must corroborate in
+  vivo.
+- **Tumor efficacy**: report tumor volume (calipers: V = length × width² / 2), body weight, survival,
+  and toxicity. Include a free-drug comparator and an untreated control; do not claim "superior
+  antitumor efficacy" from tumor volume alone without survival and toxicity data.
+
+**Targeting strategies — classify explicitly.**
+- **Passive targeting**: EPR-based; depends on tumor vascular permeability and retention.
+- **Active targeting**: ligand-receptor (folate/FR, RGD/integrin, transferrin/TfR, aptamer, antibody,
+  peptide, sugar/lectin). Report the ligand density per particle and the receptor expression level on
+  target vs off-target cells.
+- **Stimuli-responsive**: endogenous (**pH** endosomal/lysosomal, **redox** GSH, **enzyme**
+  MMP/hyaluronidase, **ATP**) or exogenous (**temperature**, **light** NIR photothermal/photodynamic,
+  **magnetic field**, **ultrasound**). Report the trigger threshold and release kinetics.
+- *Flag:* "targeted nanoparticle" without specifying passive vs active, the ligand, and evidence of
+  receptor-mediated uptake.
+
+**Safety, regulation, and translation.**
+- Toxicity: **acute** (single-dose LD50 or MTD) vs **subacute / subchronic / chronic** (repeat-dose,
+  duration specified). Report hematology, clinical chemistry, organ histopathology, and organ coefficient.
+- **Immunogenicity**: complement activation (**CARPA**), cytokine release, anti-PEG antibodies (if
+  PEGylated), hypersensitivity.
+- **RES / MPS uptake**: liver (Kupffer cells) and spleen are expected; report as %ID/g and explain if
+  unusually high or low.
+- **Clearance**: renal (particles <~5.5 nm hydrodynamic diameter) vs hepatobiliary (larger particles);
+  do not assert renal clearance for 100 nm particles.
+- **CMC / quality**: batch-to-batch consistency (size, PDI, zeta, EE across ≥3 batches), sterility,
+  endotoxin (<0.5 EU/mL per USP), filter sterilization method, and scale-up (lab vs pilot batch).
+- *Flag:* claiming "clinical translation potential" without addressing scalability, sterilization,
+  stability, and batch consistency.
 
 ---
 
